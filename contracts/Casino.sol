@@ -13,8 +13,6 @@ contract Casino is usingOraclize {
     mapping(uint => address[]) private numberBetPlayers;
 
     function Casino(uint _minimumBet, uint _maxNumberOfBets) public {
-        // require(_minimumBet > 0);
-        // require(_maxNumberOfBets > 0 && _maxNumberOfBets <= LIMIT_AMOUNT_BETS);
         owner = msg.sender;
 
         numberOfBets = 0;
@@ -27,7 +25,8 @@ contract Casino is usingOraclize {
             maxNumberOfBets = _maxNumberOfBets;
         }
 
-        OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
+        //OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
+        OAR = OraclizeAddrResolverI(0x3dCB1BeeD059bc733192E7b9a62AF4C62836d3da);
         oraclize_setProof(proofType_Ledger);
         //oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
     }
@@ -59,20 +58,27 @@ contract Casino is usingOraclize {
         _;
     }
 
+    event GenerateNumberWinner(bytes32 queryId);
     function generateNumberWinner() payable onEndGame public {
         uint numberRandomBytes = 7;
         uint delay = 0;
         uint callbackGas = 200000;
 
         bytes32 queryId = oraclize_newRandomDSQuery(delay, numberRandomBytes, callbackGas);
+        GenerateNumberWinner(queryId);
         queryId; // gets rid of the compiler warning about unused variable.
     }
 
+    event CallbackEvent(bytes32 _queryId, string _result, bytes _proof);
+    event Winner(uint numberWinner);
     function __callback(bytes32 _queryId, string _result, bytes _proof) oraclize_randomDS_proofVerify(_queryId, _result, _proof) onEndGame public {
         // Checks that the sender of this callback was in fact oraclize
+        CallbackEvent(_queryId, _result,_proof);
         assert(msg.sender == oraclize_cbAddress());
 
         numberWinner = (uint(keccak256(_result)) % 10 + 1);
+        Winner(numberWinner);
+
         distributePrizes();
     }
     // function __callback(bytes32 _queryId, string _result, bytes _proof) onEndGame public {
