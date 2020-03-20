@@ -373,3 +373,21 @@ ipfs name publish <hash_of_dir_folder>
 What to Submit?
 Submit as exercise outcome the .txt file with the URL after it is uploaded to ipfs.
 Example: https://gateway.ipfs.io/ipfs/QmUCjkUigBFw4RuTLwUajvQ5q8QMqmFHpmAiTBhLVosEcR
+
+
+NOTES:
+git clone https://github.com/oraclize/ethereum-bridge.git
+cd ethereum-bridge
+npm install
+
+sudo npm install ethereum-bridge -g
+
+then I ran 
+
+cd mi4-exercise8
+ethereum-bridge -H localhost:8545 -a 1
+
+Follow the instructions of the output.
+Please add this line to your contract constructor:
+
+OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);

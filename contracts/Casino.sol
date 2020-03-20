@@ -13,8 +13,8 @@ contract Casino is usingOraclize {
     mapping(uint => address[]) private numberBetPlayers;
 
     function Casino(uint _minimumBet, uint _maxNumberOfBets) public {
-        require(_minimumBet > 0);
-        require(_maxNumberOfBets > 0 && _maxNumberOfBets <= LIMIT_AMOUNT_BETS);
+        // require(_minimumBet > 0);
+        // require(_maxNumberOfBets > 0 && _maxNumberOfBets <= LIMIT_AMOUNT_BETS);
         owner = msg.sender;
 
         numberOfBets = 0;
@@ -26,7 +26,10 @@ contract Casino is usingOraclize {
         if (_maxNumberOfBets > 0 && _maxNumberOfBets <= LIMIT_AMOUNT_BETS) {
             maxNumberOfBets = _maxNumberOfBets;
         }
+
+        OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
         oraclize_setProof(proofType_Ledger);
+        //oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
     }
 
     function bet(uint numberToBet) payable public {
@@ -72,6 +75,13 @@ contract Casino is usingOraclize {
         numberWinner = (uint(keccak256(_result)) % 10 + 1);
         distributePrizes();
     }
+    // function __callback(bytes32 _queryId, string _result, bytes _proof) onEndGame public {
+    //     // Checks that the sender of this callback was in fact oraclize
+    //     assert(msg.sender == oraclize_cbAddress());
+
+    //     numberWinner = (uint(keccak256(_result)) % 10 + 1);
+    //     distributePrizes();
+    // }
 
     function distributePrizes() onEndGame public {
        uint winnerEtherAmount = totalBet / numberBetPlayers[numberWinner].length; // How much each winner gets
