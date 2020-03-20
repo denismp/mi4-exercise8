@@ -13,6 +13,8 @@ contract Casino is usingOraclize {
     mapping(uint => address[]) private numberBetPlayers;
 
     function Casino(uint _minimumBet, uint _maxNumberOfBets) public {
+        require(_minimumBet > 0);
+        require(_maxNumberOfBets > 0 && _maxNumberOfBets <= LIMIT_AMOUNT_BETS);
         owner = msg.sender;
 
         numberOfBets = 0;
