@@ -391,3 +391,7 @@ Follow the instructions of the output.
 Please add this line to your contract constructor:
 
 OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
+
+(base) Deniss-IMAC.fios-router.home:denisputnam
+/Users/denisputnam/git/mi4-exercise8>npm install @truffle/hdwallet-provider
+/Users/denisputnam/git/mi4-exercise8>truffle migrate --network ropsten

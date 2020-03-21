@@ -11,6 +11,7 @@ contract Casino is usingOraclize {
     uint private numberWinner;
     mapping(address => uint) private playerBetsNumber;
     mapping(uint => address[]) private numberBetPlayers;
+    mapping(address => bool) private activePlayers;
 
     function Casino(uint _minimumBet, uint _maxNumberOfBets) public {
         owner = msg.sender;
@@ -26,7 +27,8 @@ contract Casino is usingOraclize {
         }
 
         //OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
-        OAR = OraclizeAddrResolverI(0x3dCB1BeeD059bc733192E7b9a62AF4C62836d3da);
+        //OAR = OraclizeAddrResolverI(0x3dCB1BeeD059bc733192E7b9a62AF4C62836d3da);
+        //OAR = OraclizeAddrResolverI(0x5F930eEf71cDe47400ff5b3CebF714E031d8D302);
         oraclize_setProof(proofType_Ledger);
         //oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
     }
@@ -38,6 +40,7 @@ contract Casino is usingOraclize {
         assert(msg.value >= minimumBet);
 
         playerBetsNumber[msg.sender] = numberToBet;
+        activePlayers[msg.sender] = true;
 
         numberBetPlayers[numberToBet].push(msg.sender);
 
@@ -50,7 +53,7 @@ contract Casino is usingOraclize {
     }
 
     function checkPlayerExists(address player) public view returns (bool) {
-       return playerBetsNumber[player] > 0;
+       return activePlayers[player];
     }
 
     modifier onEndGame() {
@@ -62,7 +65,7 @@ contract Casino is usingOraclize {
     function generateNumberWinner() payable onEndGame public {
         uint numberRandomBytes = 7;
         uint delay = 0;
-        uint callbackGas = 200000;
+        uint callbackGas = 400000;
 
         bytes32 queryId = oraclize_newRandomDSQuery(delay, numberRandomBytes, callbackGas);
         GenerateNumberWinner(queryId);
@@ -90,19 +93,23 @@ contract Casino is usingOraclize {
     // }
 
     function distributePrizes() onEndGame public {
-       uint winnerEtherAmount = totalBet / numberBetPlayers[numberWinner].length; // How much each winner gets
+        uint winnerEtherAmount = 0;
+        if(numberBetPlayers[numberWinner].length > 0) {
+            winnerEtherAmount = totalBet / numberBetPlayers[numberWinner].length; // How much each winner gets
+        }
+        //uint winnerEtherAmount = totalBet / numberBetPlayers[numberWinner].length; // How much each winner gets
 
-       // Loop through all the winners to send the corresponding prize for each one
-       for (uint i = 0; i < numberBetPlayers[numberWinner].length; i++) {
-           numberBetPlayers[numberWinner][i].transfer(winnerEtherAmount);
-       }
+        // Loop through all the winners to send the corresponding prize for each one
+        for (uint i = 0; i < numberBetPlayers[numberWinner].length; i++) {
+            numberBetPlayers[numberWinner][i].transfer(winnerEtherAmount);
+        }
 
-       // Delete all the players for each number
-       for (uint j = 1; j <= 10; j++) {
-           numberBetPlayers[j].length = 0;
-       }
+        // Delete all the players for each number
+        for (uint j = 1; j <= 10; j++) {
+            numberBetPlayers[j].length = 0;
+        }
 
-       totalBet = 0;
-       numberOfBets = 0;
+        totalBet = 0;
+        numberOfBets = 0;
     }
 }
