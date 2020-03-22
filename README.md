@@ -396,7 +396,7 @@ NOTE: 03/22/2020
 Forget the previous NOTE.
 
 1. Make sure you are running v10.14.2 of node.  Nvm is a node version manager.  All of this is important to get webpack to work.
-   0. Got to https://github.com/nvm-sh/nvm/blob/master/README.md
+   0. Go to https://github.com/nvm-sh/nvm/blob/master/README.md
    1. Install nvm:
       a. curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
       b. nvm ls-remote -- this will list all available versions of node
