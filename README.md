@@ -392,6 +392,23 @@ Please add this line to your contract constructor:
 
 OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
 
-(base) Deniss-IMAC.fios-router.home:denisputnam
-/Users/denisputnam/git/mi4-exercise8>npm install @truffle/hdwallet-provider
-/Users/denisputnam/git/mi4-exercise8>truffle migrate --network ropsten
+NOTE: 03/22/2020
+Forget the previous NOTE.
+
+1. Make sure you are running v10.14.2 of node.  Nvm is a node version manager.  All of this is important to get webpack to work.
+   1. Install nvm:
+      a. curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+      b. nvm ls-remote -- this will list all available versions of node
+      c. nvm install 10.14.2
+      d. nvm use 10
+      e. In your project root directory run "npm install" to update your package.json file.
+
+2. /Users/denisputnam/git/mi4-exercise8>npm install @truffle/hdwallet-provider
+3. /Users/denisputnam/git/mi4-exercise8>truffle migrate --network ropsten
+4. run webpack in the project root directory
+
+5. ipfs init  // only once
+6. in a separate window run ipfs daemon
+7. ipfs swarm peers // only once
+8. ipfs add --recursive "full path to dist"
+9. ipfs name publish Qme1iY4Zayn5RRYPvuaLskZ5mGQZq5MEn66j3dY1SmjSqg // hash is the dist one
