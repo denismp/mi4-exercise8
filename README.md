@@ -412,4 +412,5 @@ Forget the previous NOTE.
 6. in a separate window run ipfs daemon
 7. ipfs swarm peers // only once
 8. ipfs add --recursive "full path to dist"
-9. ipfs name publish Qme1iY4Zayn5RRYPvuaLskZ5mGQZq5MEn66j3dY1SmjSqg // hash is the dist one
+9. ipfs name publish QmW9pezLXKrpcP4JZfub9aKdqTdhRa6S2afAPMZ5xmaKb1 // hash is the dist one
+10 https://gateway.ipfs.io/ipfs/QmW9pezLXKrpcP4JZfub9aKdqTdhRa6S2afAPMZ5xmaKb1
