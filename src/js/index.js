@@ -13,10 +13,11 @@ class App extends React.Component {
          totalBet: 0,
          maxAmountOfBets: 0,
       }
-
-      if(typeof web3 != 'undefined'){
+      
+      window.ethereum.enable() // NEW
+      if(window.web3){ // NEW
          console.log("Using web3 detected from external source like Metamask")
-         this.web3 = new Web3(web3.currentProvider)
+         this.web3 = new Web3(window.web3.currentProvider) // NEW
       }else{
          console.log("No web3 detected. Falling back to https://ropsten.infuria.io/v3/7d4a1308aa2d4a5bbc448aabb6433e57. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
          //this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
@@ -95,7 +96,7 @@ class App extends React.Component {
       } else {
          this.state.ContractInstance.bet(number, {
             gas: 300000,
-            from: web3.eth.accounts[0],
+            from: this.web3.eth.accounts.currentProvider.selectedAddress, // NEW
             value: web3.toWei(bet, 'ether')
          }, (err, result) => {
             cb()
